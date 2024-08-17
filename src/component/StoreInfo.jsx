@@ -35,7 +35,6 @@ const InfoContainer = styled.div`
   cursor: pointer; /* Add cursor pointer to indicate it's clickable */
 `;
 
-
 const InfoTitle = styled.h2`
   font-size: 18px;
   margin-bottom: 10px;
@@ -46,3 +45,4 @@ const InfoDetail = styled.p`
 `;
 
 export default StoreInfo;
+

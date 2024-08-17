@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  /* font-size: 24px; */
   color: #333;
   margin-bottom: 10px;
 `;
@@ -27,17 +27,18 @@ const Subtitle = styled.h2`
 
 const Logo = styled.img`
   width: 150px;
-  margin-bottom: 30px;
 `;
 
 const KakaoLoginButton = styled.button`
   background-color: transparent;
   border: none;
   cursor: pointer;
+
+  margin-top: 50px;
 `;
 
 const KakaoLoginImage = styled.img`
-  width: 200px;
+  width: 300px;
 `;
 
 const LoginPage = () => {
@@ -51,9 +52,9 @@ const LoginPage = () => {
 
   return (
     <Container>
-      <Title>제주 아동급식 카드 가맹점 찾기</Title>
-      <Subtitle>제주 꼬망이들</Subtitle>
       <Logo src={logo} alt="Logo" />
+      <Title>제주 꼬망이들</Title>
+      <Subtitle>제주 아동급식 카드 가맹점 찾기 서비스</Subtitle>
       <KakaoLoginButton onClick={handleLogin}>
         <KakaoLoginImage src={kakao_login_button_img} alt="카카오 로그인" />
       </KakaoLoginButton>

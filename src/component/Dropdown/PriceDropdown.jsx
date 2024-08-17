@@ -18,7 +18,8 @@ const BoxContainer = styled.div`
   align-items: center;
   width: 150px;
   height: 30px;
-  border: 1px solid black;
+  /* border: 1px solid black;*/
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   padding: 3px;
 `;
@@ -46,15 +47,17 @@ const DropBox = styled.div`
     background-color: #edffe6;
   }
 `;
+
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 150px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   background-color: white;
   position: absolute;
-  top: 40px;
+  top: 45px;
   z-index: 1;
   padding: 3px;
 `;
@@ -83,7 +86,9 @@ const PriceDropdown = ({ onClick, onSelect, selectedDropValue }) => {
       {isOpen && (
         <ListContainer>
           {priceList.map((el) => (
-            <DropBox key={el.id} onClick={handleItemClick}>{el.value}</DropBox>
+            <DropBox key={el.id} onClick={handleItemClick}>
+              {el.value}
+            </DropBox>
           ))}
         </ListContainer>
       )}
