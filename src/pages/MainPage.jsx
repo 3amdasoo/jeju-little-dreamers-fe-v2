@@ -42,7 +42,7 @@ const MainPage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [categories, setCategories] = useState([]);
-  
+
   const handleClick = useCallback(() => {
     setIsHidden(true);
   }, []);
@@ -77,7 +77,7 @@ const MainPage = () => {
   const handleReset = useCallback(() => {
     console.log("Resetting filters");
     setSelectedList([]);
-    setFilteredData(originalData); 
+    setFilteredData(originalData);
     setSelectedMenuValue("메뉴를 선택해주세요");
     setSelectedPriceValue("가격대를 골라주세요");
   }, [originalData]);
@@ -90,7 +90,7 @@ const MainPage = () => {
     try {
       console.log(`Fetching stores data at location: ${latitude}, ${longitude}`);
       const response = await fetch(
-        `http://52.78.88.248/api/stores/search?latitude=${latitude}&longitude=${longitude}&range=2000`
+        `/api/stores/search?latitude=${latitude}&longitude=${longitude}&range=2000`
       );
       const data = await response.json();
       setOriginalData(data);
@@ -122,32 +122,32 @@ const MainPage = () => {
   }, [fetchStoresData]);
 
   // Enhanced filtering logic using category instead of menu
-useEffect(() => {
+  useEffect(() => {
     if (selectedList.length === 0) {
-        console.log("No filters selected, displaying original data.");
-        setFilteredData(originalData);
+      console.log("No filters selected, displaying original data.");
+      setFilteredData(originalData);
     } else {
-        console.log("Filtering data based on selected list:", selectedList);
-        const filtered = originalData.filter((store) => {
-            const categoryMatch = selectedList.some((selected) => store.category && store.category.includes(selected));
-            console.log(`Checking store "${store.name}" (Category: ${store.category})`);
-            console.log(`Category match: ${categoryMatch}`);
+      console.log("Filtering data based on selected list:", selectedList);
+      const filtered = originalData.filter((store) => {
+        const categoryMatch = selectedList.some((selected) => store.category && store.category.includes(selected));
+        console.log(`Checking store "${store.name}" (Category: ${store.category})`);
+        console.log(`Category match: ${categoryMatch}`);
 
-            const categoryFilterActive = selectedList.some(keyword => categories.includes(keyword));
-            console.log(`Category filter active: ${categoryFilterActive}`);
+        const categoryFilterActive = selectedList.some(keyword => categories.includes(keyword));
+        console.log(`Category filter active: ${categoryFilterActive}`);
 
-            if (categoryFilterActive) {
-                console.log(`Store "${store.name}" included: ${categoryMatch}`);
-                return categoryMatch;
-            } else {
-                console.log(`Store "${store.name}" included: true (no active filters)`);
-                return true;
-            }
-        });
-        console.log("Filtered data:", filtered);
-        setFilteredData(filtered);
+        if (categoryFilterActive) {
+          console.log(`Store "${store.name}" included: ${categoryMatch}`);
+          return categoryMatch;
+        } else {
+          console.log(`Store "${store.name}" included: true (no active filters)`);
+          return true;
+        }
+      });
+      console.log("Filtered data:", filtered);
+      setFilteredData(filtered);
     }
-}, [selectedList, originalData, categories]);
+  }, [selectedList, originalData, categories]);
 
 
   const handleMarkerClick = useCallback((restaurant) => {
