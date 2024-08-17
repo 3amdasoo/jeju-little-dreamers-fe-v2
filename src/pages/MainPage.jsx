@@ -13,14 +13,14 @@ const SelectContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-top: 20px;
+  margin: 15px;
 `;
 
 const DropdownContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 15px;
-  z-index: 2;
+  z-index: 4;
 `;
 
 const ResetBnt = styled.button`
@@ -33,14 +33,14 @@ const ResetBnt = styled.button`
 `;
 
 const MainPage = () => {
-  const [selectedMenuValue, setSelectedMenuValue] = useState("오늘 어떤 메뉴?");
+  const [selectedMenuValue, setSelectedMenuValue] =
+    useState("메뉴를 선택해주세요");
   const [selectedPriceValue, setSelectedPriceValue] =
-    useState("오늘 얼마쓸지!");
+    useState("가격대를 골라주세요");
   const [selected_list, setSelected_list] = useState([]);
   const [filteredDummy, setFilteredDummy] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
-
   const [isHidden, setIsHidden] = useState(false);
 
   const handleClick = () => {
@@ -143,7 +143,7 @@ const MainPage = () => {
             selectedDropValue={selectedMenuValue}
           />
           <PriceDropdown
-            onClick={handleMenuSelected}
+            onClick={handlePriceSelected}
             selectedDropValue={selectedPriceValue}
           />
         </DropdownContainer>
@@ -155,12 +155,12 @@ const MainPage = () => {
         ))}
       </KeywordContainer>
       <Map filteredData={filteredDummy} onMarkerClick={handleMarkerClick} />
-      <AreYouSlaveContainer hidden={isHidden} onClick={handleClick}>
+      <AreYouSlaveContainer hidden={isHidden}>
         <AreYouSlave>공무원이신가요?</AreYouSlave>
         <ClickText onClick={handleIsOpen}>
           필터링된 가맹점 자료를 이메일로..
         </ClickText>
-        <Close>X</Close>
+        <Close onClick={handleClick}>X</Close>
       </AreYouSlaveContainer>
       {isOpenModal && (
         <ModalContainer>
@@ -198,6 +198,9 @@ const KeywordContainer = styled.div`
   gap: 5px;
   justify-content: center;
   flex-wrap: wrap;
+  position: absolute;
+  top: 80px;
+  z-index: 3;
 `;
 
 const AreYouSlaveContainer = styled.div`
@@ -213,11 +216,14 @@ const AreYouSlaveContainer = styled.div`
 const AreYouSlave = styled.span`
   font-size: 15px;
   font-weight: 500;
+
 `;
 
 const ClickText = styled.span`
   font-size: 15px;
   font-weight: 500;
+  background-color: #EDFFE6;
+  color: #3a9918;
 `;
 
 const Close = styled.button`

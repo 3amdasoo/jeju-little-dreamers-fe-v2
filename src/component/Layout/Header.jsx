@@ -17,7 +17,6 @@ const Title = styled.span`
 const Header = () => {
   return (
     <HeaderStyle>
-      <img />
       <Title>제주 꼬망이들</Title>
     </HeaderStyle>
   );
