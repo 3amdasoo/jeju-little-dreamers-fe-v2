@@ -30,15 +30,16 @@ const Restaurant = () => {
         };
 
         const dummyReviews = [
-            { nickname: "익명142121231", content: "음식이 맛있어요." },
-            { nickname: "익명142121232", content: "친절해요." },
-            { nickname: "익명142121233", content: "아동급식카드를 받아요." },
-            { nickname: "익명142121234", content: "재료가 신선해요." },
-            { nickname: "익명142121235", content: "가성비가 좋아요." },
-            { nickname: "익명142121236", content: "혼밥하기 좋아요." },
-            { nickname: "익명142121237", content: "매장이 청결해요." },
-            { nickname: "익명142121238", content: "양이 많아요." },
-        ];
+        { nickname: "익명1", content: "음식이 정말 맛있었어요. 다시 가고 싶네요!" },
+        { nickname: "익명2", content: "직원분들이 너무 친절하셨어요. 기분 좋게 식사했습니다." },
+        { nickname: "익명3", content: "아동급식카드도 사용 가능해서 좋았습니다." },
+        { nickname: "익명4", content: "재료가 신선하고, 음식도 깔끔했어요." },
+        { nickname: "익명5", content: "가격 대비 음식의 품질이 훌륭해요. 강추합니다!" },
+        { nickname: "익명6", content: "혼자 먹기에도 편한 분위기였어요. 종종 들를 것 같아요." },
+        { nickname: "익명7", content: "매장이 정말 청결해서 안심하고 먹을 수 있었어요." },
+        { nickname: "익명8", content: "양이 푸짐해서 배부르게 먹고 왔어요." },
+    ];
+
 
         setRestaurantData(dummyData);
         setReviews(dummyReviews);
@@ -110,7 +111,7 @@ const Container = styled.div`
 const Card = styled.div`
     background-color: #ffffff;
     border-radius: 10px;
-    padding: 25px;
+    padding: 20px;
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
 `;
 
