@@ -27,46 +27,50 @@ const Review = () => {
     const selectedReview = predefinedReviews.find((review) => review.id === id);
     const polarOppositeReviewId = selectedReview.polarOpposite;
 
-        if (selectedReviews.includes(id)) {
-            setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
-        } else {
-            setSelectedReviews([
-                ...selectedReviews.filter(reviewId => reviewId !== polarOppositeReviewId),
-                id
-            ]);
-        }
+    if (selectedReviews.includes(id)) {
+      setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
+    } else {
+      setSelectedReviews([
+        ...selectedReviews.filter(reviewId => reviewId !== polarOppositeReviewId),
+        id
+      ]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const finalReview = customReview || selectedReviews.map(id => predefinedReviews.find(review => review.id === id).label).join(', ');
+    if (!finalReview) {
+      alert("리뷰를 작성하거나 선택해주세요.");
+      return;
+    }
+
+    const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
+    const reviewData = {
+      user_id: 1, // Replace with actual user ID if available
+      store_id: restaurantId,
+      content: finalReview,
+      grade: 5, // Assuming a static grade, adjust as needed
     };
 
-    const handleSubmit = async () => {
-        const finalReview = customReview || selectedReviews.map(id => predefinedReviews.find(review => review.id === id).label).join(', ');
-        if (!finalReview) {
-            alert("리뷰를 작성하거나 선택해주세요.");
-            return;
-        }
+    try {
+      const response = await axios.post('http://52.78.88.248/api/review/upload', reviewData);
+      if (response.status === 200) {
+        alert("리뷰가 제출되었습니다!");
+        navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동
+      } else {
+        console.error("Error submitting review:", response.statusText);
+        alert("리뷰 제출 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("리뷰 제출 중 오류가 발생했습니다.");
+    }
+  };
 
-        const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
-        const reviewData = {
-            user_id: 1, // Replace with actual user ID if available
-            store_id: restaurantId,
-            content: finalReview,
-            grade: 5, // Assuming a static grade, adjust as needed
-        };
-
-        try {
-            await axios.post('/api/review/upload', reviewData);
-            alert("리뷰가 제출되었습니다!");
-        } catch (error) {
-            console.error("Error submitting review:", error);
-            alert("리뷰 제출 중 오류가 발생했습니다.");
-        } finally {
-            navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동
-        }
-    };
-
-    return (
-        <Container>
-            <h1>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</h1>
-            <Description>리뷰는 익명으로 작성됩니다.</Description>
+  return (
+    <Container>
+      <h1>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</h1>
+      <Description>리뷰는 익명으로 작성됩니다.</Description>
 
       <Textarea
         placeholder="리뷰를 입력해주세요..."
