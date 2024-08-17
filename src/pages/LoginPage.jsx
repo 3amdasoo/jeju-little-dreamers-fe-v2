@@ -42,7 +42,7 @@ const KakaoLoginImage = styled.img`
 
 const LoginPage = () => {
   const kakaoApiKey = "6022b3ea363825dba0253bc58c3f328c"; // REST API KEY
-  const redirect_uri = "http://52.78.88.248:3000/auth"; // Redirect URI
+  const redirect_uri = "http://52.78.88.248/auth"; // Redirect URI
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoApiKey}&redirect_uri=${redirect_uri}&response_type=code`;
 
   const handleLogin = () => {
