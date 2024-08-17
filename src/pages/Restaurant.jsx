@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import loading from "../assets/download.gif";
 
 const Restaurant = () => {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -12,11 +13,14 @@ const Restaurant = () => {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await axios.get(`http://52.78.88.248/api/stores/menu`, {
-          params: {
-            storeId: id,
-          },
-        });
+        const response = await axios.get(
+          `http://52.78.88.248/api/stores/menu`,
+          {
+            params: {
+              storeId: id,
+            },
+          }
+        );
 
         const fetchedData = response.data;
 
@@ -28,10 +32,13 @@ const Restaurant = () => {
             phone: fetchedData.storePhone,
             category: fetchedData.category,
           },
-          menu: fetchedData.menus.length > 0 ? fetchedData.menus.map(item => ({
-            name: item.name,
-            price: item.price,
-          })) : null,
+          menu:
+            fetchedData.menus.length > 0
+              ? fetchedData.menus.map((item) => ({
+                  name: item.name,
+                  price: item.price,
+                }))
+              : null,
         };
 
         setRestaurantData(formattedData);
@@ -42,11 +49,14 @@ const Restaurant = () => {
 
     const fetchReviewsData = async () => {
       try {
-        const response = await axios.get(`http://52.78.88.248/api/stores/review`, {
-          params: {
-            storeId: id,
-          },
-        });
+        const response = await axios.get(
+          `http://52.78.88.248/api/stores/review`,
+          {
+            params: {
+              storeId: id,
+            },
+          }
+        );
 
         if (response.data.length > 0) {
           setReviews(response.data);
@@ -72,7 +82,12 @@ const Restaurant = () => {
   };
 
   if (!restaurantData) {
-    return <div>Loading...</div>;
+    return (
+      <LoadingDiv>
+        잠시만 기다려주세요!
+        <Loading src={loading} />
+      </LoadingDiv>
+    );
   }
 
   return (
@@ -143,8 +158,7 @@ const Restaurant = () => {
           ) : (
             reviews.map((review, index) => (
               <ReviewCard key={index}>
-                <ReviewNickname>익명의 누군가</ReviewNickname>{" "}
-                {review.content}
+                <ReviewNickname>익명의 누군가</ReviewNickname> {review.content}
               </ReviewCard>
             ))
           )}
@@ -155,6 +169,21 @@ const Restaurant = () => {
 };
 
 export default Restaurant;
+
+const LoadingDiv = styled.div`
+  width: 500px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-weight: 600;
+  font-size: 20px;
+`;
+const Loading = styled.img`
+  width: 400px;
+`;
 
 const ReviewHeader = styled.div`
   display: flex;

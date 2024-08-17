@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import loading from "../../assets/download.gif";
 
 export default function Map({ filteredData, onMarkerClick }) {
   const [position, setPosition] = useState({
@@ -103,7 +105,12 @@ export default function Map({ filteredData, onMarkerClick }) {
   }, [position, filteredData, onMarkerClick]);
 
   if (position.isLoading) {
-    return <div>Loading map...</div>;
+    return (
+      <LoadingDiv>
+        잠시만 기다려주세요 !
+        <Loading src={loading} alt="" />
+      </LoadingDiv>
+    );
   }
 
   if (position.errMsg) {
@@ -112,3 +119,18 @@ export default function Map({ filteredData, onMarkerClick }) {
 
   return <div id="map" style={{ width: "100%", height: "650px" }}></div>;
 }
+
+const LoadingDiv = styled.div`
+  width: 500px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-weight: 600;
+  font-size: 20px;
+`;
+const Loading = styled.img`
+  width: 400px;
+`;

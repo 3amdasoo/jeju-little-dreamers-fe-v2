@@ -307,7 +307,7 @@ const ModalContainer = styled.div`
   position: absolute;
   top: 200px;
   left: 30px;
-  z-index: 2;
+  z-index: 11;
   background-color: white;
   /* border: 5px solid #2ecc71; */
   box-shadow: 0 5px 20px 2px rgba(0, 0, 0, 0.2);
