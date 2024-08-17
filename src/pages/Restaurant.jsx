@@ -104,6 +104,7 @@ const Container = styled.div`
     gap: 20px;
     max-width: 800px;
     margin: 0 auto;
+    font-family: "Noto Sans", sans-serif;
 `;
 
 const Card = styled.div`
