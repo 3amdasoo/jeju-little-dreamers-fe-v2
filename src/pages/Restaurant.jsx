@@ -30,9 +30,29 @@ const Restaurant = () => {
             })),
           };
           setRestaurantData(formattedData);
+        } else {
+          throw new Error("Menu not found");
         }
       } catch (error) {
-        console.error("Error fetching restaurant data:", error);
+        if (error.response && error.response.status === 404 || error.message === "Menu not found") {
+          // If 404 error, fetch store details without menu
+          try {
+            const fallbackResponse = await axios.get(`http://52.78.88.248/api/stores/details`, {
+              params: {
+                storeId: id,
+              },
+            });
+            setRestaurantData({
+              id: fallbackResponse.data.id,
+              store: fallbackResponse.data,
+              menu: null, // No menu available
+            });
+          } catch (fallbackError) {
+            console.error("Error fetching store details:", fallbackError);
+          }
+        } else {
+          console.error("Error fetching restaurant data:", error);
+        }
       }
     };
 
@@ -91,13 +111,17 @@ const Restaurant = () => {
         <Card>
           <MenuSection>
             <MenuTitle>메뉴</MenuTitle>
-            <MenuList>
-              {restaurantData.menu.map((item, index) => (
-                <MenuItem key={index}>
-                  {item.name} - {item.price}원
-                </MenuItem>
-              ))}
-            </MenuList>
+            {restaurantData.menu ? (
+              <MenuList>
+                {restaurantData.menu.map((item, index) => (
+                  <MenuItem key={index}>
+                    {item.name} - {item.price}원
+                  </MenuItem>
+                ))}
+              </MenuList>
+            ) : (
+              <NoMenuMessage>메뉴 정보가 없습니다.</NoMenuMessage>
+            )}
           </MenuSection>
         </Card>
       </CardContainer>
@@ -212,6 +236,12 @@ const MenuItem = styled.li`
   font-size: 1.2rem;
   margin-bottom: 8px;
   color: #2c3e50;
+`;
+
+const NoMenuMessage = styled.div`
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  text-align: center;
 `;
 
 const ReviewSection = styled.div`
