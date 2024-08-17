@@ -7,6 +7,7 @@ import nearbyData from "../../src/data/nearby.json";
 import menuData from "../../src/data/menu.json";
 import SelectBox from "../component/SelectBox";
 
+
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -216,13 +217,12 @@ const AreYouSlaveContainer = styled.div`
 const AreYouSlave = styled.span`
   font-size: 15px;
   font-weight: 500;
-
 `;
 
 const ClickText = styled.span`
   font-size: 15px;
   font-weight: 500;
-  background-color: #EDFFE6;
+  background-color: #edffe6;
   color: #3a9918;
 `;
 

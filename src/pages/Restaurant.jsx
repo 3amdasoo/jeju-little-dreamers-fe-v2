@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 
 const Restaurant = () => {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -104,22 +103,31 @@ const Restaurant = () => {
         </Card>
       </CardContainer>
       <ReviewSection>
-        <ReviewTitle>리뷰</ReviewTitle>
-        <WriteReviewButton onClick={handleWriteReview}>
-          리뷰 작성하기
-        </WriteReviewButton>
+        <ReviewHeader>
+          <ReviewTitle>리뷰</ReviewTitle>
+          <WriteReviewButton onClick={handleWriteReview}>
+            리뷰 작성하기
+          </WriteReviewButton>
+        </ReviewHeader>
         <ReviewBoxContainer>
+          <TotalReview>총 30건</TotalReview>
           <ReviewBox>
             <ReviewContent>맛있어요</ReviewContent>
-            <Count>23건</Count>
+            <RateBox>
+              <Count>23건</Count>
+            </RateBox>
           </ReviewBox>
           <ReviewBox>
             <ReviewContent>친절해요</ReviewContent>
-            <Count>23건</Count>
+            <RateBox>
+              <Count>23건</Count>
+            </RateBox>
           </ReviewBox>
           <ReviewBox>
             <ReviewContent>아동 급식카드를 받아요</ReviewContent>
-            <Count>23건</Count>
+            <RateBox>
+              <Count>23건</Count>
+            </RateBox>
           </ReviewBox>
         </ReviewBoxContainer>
         <ReviewList>
@@ -137,19 +145,34 @@ const Restaurant = () => {
 
 export default Restaurant;
 
+const ReviewHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TotalReview = styled.h3``;
 const ReviewBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
 `;
-const ReviewBox = styled.div`
+const ReviewBox = styled.div``;
+
+const RateBox = styled.div`
+  width: auto;
+  background-color: blueviolet;
   display: flex;
   flex-direction: row;
 `;
 
 const ReviewContent = styled.div``;
-const Count = styled.div``;
+const Count = styled.div`
+  background-color: yellow;
+  width: 320px;
+`;
 
-// Styled components remain unchanged
 const Container = styled.div`
   padding: 20px;
   background-color: white;
