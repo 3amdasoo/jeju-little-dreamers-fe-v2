@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Review = () => {
   const location = useLocation();
@@ -28,35 +28,45 @@ const Review = () => {
     const polarOppositeReviewId = selectedReview.polarOpposite;
 
     if (selectedReviews.includes(id)) {
-      setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
+      setSelectedReviews(selectedReviews.filter((reviewId) => reviewId !== id));
     } else {
       setSelectedReviews([
-        ...selectedReviews.filter(reviewId => reviewId !== polarOppositeReviewId),
-        id
+        ...selectedReviews.filter(
+          (reviewId) => reviewId !== polarOppositeReviewId
+        ),
+        id,
       ]);
     }
   };
 
   const handleSubmit = async () => {
-    const finalReview = customReview || selectedReviews.map(id => predefinedReviews.find(review => review.id === id).label).join(', ');
+    const finalReview =
+      customReview ||
+      selectedReviews
+        .map((id) => predefinedReviews.find((review) => review.id === id).label)
+        .join(", ");
     if (!finalReview) {
       alert("리뷰를 작성하거나 선택해주세요.");
       return;
     }
 
-    const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
+    const restaurantId = location.pathname.split("/")[2]; // 현재 경로에서 식당 ID를 추출
     const reviewData = new FormData();
-    reviewData.append('user_id', 1); // Replace with actual user ID if available
-    reviewData.append('store_id', restaurantId);
-    reviewData.append('content', finalReview);
-    reviewData.append('grade', 4); // Assuming a grade of 4, adjust as needed
+    reviewData.append("user_id", 1); // Replace with actual user ID if available
+    reviewData.append("store_id", restaurantId);
+    reviewData.append("content", finalReview);
+    reviewData.append("grade", 4); // Assuming a grade of 4, adjust as needed
 
     try {
-      const response = await axios.post('http://52.78.88.248/api/review/upload', reviewData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const response = await axios.post(
+        "http://52.78.88.248/api/review/upload",
+        reviewData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
         alert("리뷰가 제출되었습니다!");
@@ -73,8 +83,8 @@ const Review = () => {
 
   return (
     <Container>
-      <h1>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</h1>
-      <Description>리뷰는 익명으로 작성됩니다.</Description>
+      <Title>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</Title>
+      <Description>리뷰는 익명으로 작성됩니다</Description>
 
       <Textarea
         placeholder="리뷰를 입력해주세요..."
@@ -117,20 +127,24 @@ export default Review;
 
 const Container = styled.div`
   max-width: 500px;
-  margin: 0 auto;
+  margin: 30px auto;
   padding: 30px 20px;
-  background-color: #f7f9fa;
+  background-color: white;
   border-radius: 12px;
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); */
   text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
+`;
+
+const Title = styled.h2`
+  margin: 0px;
 `;
 
 const Description = styled.p`
-  margin-top: 20px;
+  /* margin-top: 20px; */
   font-size: 1.1rem;
   color: #7f8c8d;
 `;
@@ -163,7 +177,7 @@ const ReviewPair = styled.div`
 
 const ReviewButton = styled.button`
   padding: 12px 20px;
-  background-color: ${({ isSelected }) => (isSelected ? "#3498db" : "#ecf0f1")};
+  background-color: ${({ isSelected }) => (isSelected ? "#2ecc71" : "#ecf0f1")};
   color: ${({ isSelected }) => (isSelected ? "#fff" : "#333")};
   font-size: 1rem;
   border: none;
@@ -175,7 +189,7 @@ const ReviewButton = styled.button`
 
   &:hover {
     background-color: ${({ isSelected }) =>
-      isSelected ? "#2980b9" : "#bdc3c7"};
+      isSelected ? "#2ecc71" : "#bdc3c7"};
   }
 `;
 

@@ -1,23 +1,25 @@
 import styled from "styled-components";
+import title from "../../assets/logoImg.png";
+
 const HeaderStyle = styled.header`
   width: 100%;
-  height: 50px;
+  height: 90px;
   display: flex;
   flex-direction: row;
+  /* overflow: hidden; */
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid;
+  /* border-bottom: 1px solid; */
 `;
 
-const Title = styled.span`
-  font-size: 30px;
-  font-weight: 400;
+const TitleImg = styled.img`
+  width: 300px;
 `;
 
 const Header = () => {
   return (
     <HeaderStyle>
-      <Title>제주 꼬망이들</Title>
+      <TitleImg src={title} alt="" />
     </HeaderStyle>
   );
 };

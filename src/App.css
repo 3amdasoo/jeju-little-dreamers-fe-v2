@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "S-CoreDream-3Light";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .App {
   display: flex;
   align-items: center;
@@ -7,4 +15,10 @@
 .Content {
   min-height: 100vh;
   min-width: 500px;
+  /* border: 1px solid black; */
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.2);
+}
+
+body {
+  font-family: "S-CoreDream-3Light";
 }

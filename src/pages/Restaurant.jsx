@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import loading from "../assets/download.gif";
 
 const Restaurant = () => {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -13,11 +13,14 @@ const Restaurant = () => {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await axios.get(`http://52.78.88.248/api/stores/menu`, {
-          params: {
-            storeId: id,
-          },
-        });
+        const response = await axios.get(
+          `http://52.78.88.248/api/stores/menu`,
+          {
+            params: {
+              storeId: id,
+            },
+          }
+        );
 
         const fetchedData = response.data;
 
@@ -29,10 +32,13 @@ const Restaurant = () => {
             phone: fetchedData.storePhone,
             category: fetchedData.category,
           },
-          menu: fetchedData.menus.length > 0 ? fetchedData.menus.map(item => ({
-            name: item.name,
-            price: item.price,
-          })) : null,
+          menu:
+            fetchedData.menus.length > 0
+              ? fetchedData.menus.map((item) => ({
+                  name: item.name,
+                  price: item.price,
+                }))
+              : null,
         };
 
         setRestaurantData(formattedData);
@@ -43,11 +49,14 @@ const Restaurant = () => {
 
     const fetchReviewsData = async () => {
       try {
-        const response = await axios.get(`http://52.78.88.248/api/stores/review`, {
-          params: {
-            storeId: id,
-          },
-        });
+        const response = await axios.get(
+          `http://52.78.88.248/api/stores/review`,
+          {
+            params: {
+              storeId: id,
+            },
+          }
+        );
 
         if (response.data.length > 0) {
           setReviews(response.data);
@@ -73,7 +82,12 @@ const Restaurant = () => {
   };
 
   if (!restaurantData) {
-    return <div>Loading...</div>;
+    return (
+      <LoadingDiv>
+        잠시만 기다려주세요!
+        <Loading src={loading} />
+      </LoadingDiv>
+    );
   }
 
   return (
@@ -111,22 +125,31 @@ const Restaurant = () => {
         </Card>
       </CardContainer>
       <ReviewSection>
-        <ReviewTitle>리뷰</ReviewTitle>
-        <WriteReviewButton onClick={handleWriteReview}>
-          리뷰 작성하기
-        </WriteReviewButton>
+        <ReviewHeader>
+          <ReviewTitle>리뷰</ReviewTitle>
+          <WriteReviewButton onClick={handleWriteReview}>
+            리뷰 작성하기
+          </WriteReviewButton>
+        </ReviewHeader>
         <ReviewBoxContainer>
+          <TotalReview>총 30건</TotalReview>
           <ReviewBox>
             <ReviewContent>맛있어요</ReviewContent>
-            <Count>23건</Count>
+            <RateBox>
+              <Count>23건</Count>
+            </RateBox>
           </ReviewBox>
           <ReviewBox>
             <ReviewContent>친절해요</ReviewContent>
-            <Count>23건</Count>
+            <RateBox>
+              <Count>23건</Count>
+            </RateBox>
           </ReviewBox>
           <ReviewBox>
             <ReviewContent>아동 급식카드를 받아요</ReviewContent>
-            <Count>23건</Count>
+            <RateBox>
+              <Count>23건</Count>
+            </RateBox>
           </ReviewBox>
         </ReviewBoxContainer>
         <ReviewList>
@@ -135,8 +158,7 @@ const Restaurant = () => {
           ) : (
             reviews.map((review, index) => (
               <ReviewCard key={index}>
-                <ReviewNickname>익명의 누군가</ReviewNickname>{" "}
-                {review.content}
+                <ReviewNickname>익명의 누군가</ReviewNickname> {review.content}
               </ReviewCard>
             ))
           )}
@@ -148,20 +170,62 @@ const Restaurant = () => {
 
 export default Restaurant;
 
-// Styled components remain unchanged
+const LoadingDiv = styled.div`
+  width: 500px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-weight: 600;
+  font-size: 20px;
+`;
+const Loading = styled.img`
+  width: 400px;
+`;
 
+const ReviewHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TotalReview = styled.h3``;
 const ReviewBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
 `;
 
 const ReviewBox = styled.div`
-  display: flex;
-  flex-direction: row;
+  margin-bottom: 5px;
 `;
 
-const ReviewContent = styled.div``;
-const Count = styled.div``;
+const RateBox = styled.div`
+  width: auto;
+  background-color: #ff7777;
+  display: flex;
+  flex-direction: row;
+  border-radius: 5px;
+`;
+
+const ReviewContent = styled.h3`
+  margin: 0px 0px 3px;
+`;
+
+const Count = styled.div`
+  background-color: #2ecc71;
+  text-align: center;
+  color: white;
+  width: 320px;
+  height: 25px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Container = styled.div`
   padding: 20px;
@@ -169,7 +233,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
   max-width: 900px;
   margin: 0 auto;
   font-family: "Noto Sans", sans-serif;
@@ -180,7 +244,7 @@ const CardContainer = styled.div`
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-  gap: 15px;
+  /* gap: 5px; */
 `;
 
 const Card = styled.div``;
@@ -258,30 +322,30 @@ const ReviewCard = styled.div`
   background-color: #f7f9fa;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
 `;
 
 const ReviewNickname = styled.span`
   font-weight: bold;
-  color: #2980b9;
+  color: black;
   display: block;
   margin-bottom: 10px;
 `;
 
 const WriteReviewButton = styled.button`
   padding: 12px 25px;
-  background-color: #3498db;
-  color: #fff;
+  color: #333;
   font-size: 1.1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  align-self: flex-end;
-  margin-bottom: 25px;
+  /* align-self: flex-end; */
+  /* margin-bottom: 25px; */
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #2980b9;
+    background-color: #2ecc71;
+    color: white;
   }
 `;
 
