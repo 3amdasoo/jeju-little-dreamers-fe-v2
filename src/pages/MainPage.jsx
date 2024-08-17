@@ -13,14 +13,14 @@ const SelectContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-top: 20px;
+  margin: 15px;
 `;
 
 const DropdownContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 15px;
-  z-index: 2;
+  z-index: 4;
 `;
 
 const ResetBnt = styled.button`
@@ -33,14 +33,14 @@ const ResetBnt = styled.button`
 `;
 
 const MainPage = () => {
-  const [selectedMenuValue, setSelectedMenuValue] = useState("메뉴를 선택해주세요");
+  const [selectedMenuValue, setSelectedMenuValue] =
+    useState("메뉴를 선택해주세요");
   const [selectedPriceValue, setSelectedPriceValue] =
     useState("가격대를 골라주세요");
   const [selected_list, setSelected_list] = useState([]);
   const [filteredDummy, setFilteredDummy] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
-
   const [isHidden, setIsHidden] = useState(false);
 
   const handleClick = () => {
@@ -198,6 +198,9 @@ const KeywordContainer = styled.div`
   gap: 5px;
   justify-content: center;
   flex-wrap: wrap;
+  position: absolute;
+  top: 80px;
+  z-index: 3;
 `;
 
 const AreYouSlaveContainer = styled.div`
