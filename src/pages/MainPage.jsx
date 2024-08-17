@@ -105,21 +105,28 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          console.log("User location obtained:", { latitude, longitude });
-          fetchStoresData(latitude, longitude);
-        },
-        (error) => {
-          console.error("Error getting current location:", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, [fetchStoresData]);
+  const handleLocationError = (error) => {
+    const errorMessages = {
+      1: "User denied the request for Geolocation.",
+      2: "Location information is unavailable.",
+      3: "The request to get user location timed out.",
+      0: "An unknown error occurred.",
+    };
+    console.error(errorMessages[error.code] || errorMessages[0]);
+  };
+
+  const handleLocationSuccess = ({ coords: { latitude, longitude } }) => {
+    console.log("User location obtained:", { latitude, longitude });
+    fetchStoresData(latitude, longitude);
+  };
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError);
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
+}, [fetchStoresData]);
+
 
   // Enhanced filtering logic using category instead of menu
   useEffect(() => {

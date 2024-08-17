@@ -19,40 +19,25 @@ const Restaurant = () => {
           },
         });
 
-        if (response.data.length > 0) {
-          const fetchedData = response.data[0];
-          const formattedData = {
-            id: fetchedData.id,
-            store: fetchedData.store,
-            menu: response.data.map(item => ({
-              name: item.name,
-              price: item.price,
-            })),
-          };
-          setRestaurantData(formattedData);
-        } else {
-          throw new Error("Menu not found");
-        }
+        const fetchedData = response.data;
+
+        const formattedData = {
+          id: fetchedData.storeId,
+          store: {
+            name: fetchedData.storeName,
+            address: fetchedData.storeAddress,
+            phone: fetchedData.storePhone,
+            category: fetchedData.category,
+          },
+          menu: fetchedData.menus.length > 0 ? fetchedData.menus.map(item => ({
+            name: item.name,
+            price: item.price,
+          })) : null,
+        };
+
+        setRestaurantData(formattedData);
       } catch (error) {
-        if (error.response && error.response.status === 404 || error.message === "Menu not found") {
-          // If 404 error, fetch store details without menu
-          try {
-            const fallbackResponse = await axios.get(`http://52.78.88.248/api/stores/details`, {
-              params: {
-                storeId: id,
-              },
-            });
-            setRestaurantData({
-              id: fallbackResponse.data.id,
-              store: fallbackResponse.data,
-              menu: null, // No menu available
-            });
-          } catch (fallbackError) {
-            console.error("Error fetching store details:", fallbackError);
-          }
-        } else {
-          console.error("Error fetching restaurant data:", error);
-        }
+        console.error("Error fetching restaurant data:", error);
       }
     };
 
