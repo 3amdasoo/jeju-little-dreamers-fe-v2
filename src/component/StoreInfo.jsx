@@ -12,15 +12,9 @@ const StoreInfo = ({ restaurant }) => {
   return (
     <InfoContainer onClick={handleClick}>
       <InfoTitle>{restaurant.name}</InfoTitle>
-      <InfoDetail>
-        <strong>Address:</strong> {restaurant.address}
-      </InfoDetail>
-      <InfoDetail>
-        <strong>Phone:</strong> {restaurant.phone || "N/A"}
-      </InfoDetail>
-      <InfoDetail>
-        <strong>Category:</strong> {restaurant.category}
-      </InfoDetail>
+      <InfoDetail><strong>주소 | </strong> {restaurant.address}</InfoDetail>
+      <InfoDetail><strong>전화번호 | </strong> {restaurant.phone || "N/A"}</InfoDetail>
+      <InfoDetail>{restaurant.category}</InfoDetail>
     </InfoContainer>
   );
 };
@@ -33,12 +27,14 @@ const InfoContainer = styled.div`
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  bottom: 40px;
-  /* right: 120px; */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
   z-index: 10;
   cursor: pointer; /* Add cursor pointer to indicate it's clickable */
 `;
+
 
 const InfoTitle = styled.h2`
   font-size: 18px;

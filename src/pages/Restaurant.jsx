@@ -18,18 +18,23 @@ const Restaurant = () => {
           },
         });
 
-        if (response.data.length > 0) {
-          const fetchedData = response.data[0];
-          const formattedData = {
-            id: fetchedData.id,
-            store: fetchedData.store,
-            menu: response.data.map(item => ({
-              name: item.name,
-              price: item.price,
-            })),
-          };
-          setRestaurantData(formattedData);
-        }
+        const fetchedData = response.data;
+
+        const formattedData = {
+          id: fetchedData.storeId,
+          store: {
+            name: fetchedData.storeName,
+            address: fetchedData.storeAddress,
+            phone: fetchedData.storePhone,
+            category: fetchedData.category,
+          },
+          menu: fetchedData.menus.length > 0 ? fetchedData.menus.map(item => ({
+            name: item.name,
+            price: item.price,
+          })) : null,
+        };
+
+        setRestaurantData(formattedData);
       } catch (error) {
         console.error("Error fetching restaurant data:", error);
       }
@@ -90,13 +95,17 @@ const Restaurant = () => {
         <Card>
           <MenuSection>
             <MenuTitle>메뉴</MenuTitle>
-            <MenuList>
-              {restaurantData.menu.map((item, index) => (
-                <MenuItem key={index}>
-                  {item.name} - {item.price}원
-                </MenuItem>
-              ))}
-            </MenuList>
+            {restaurantData.menu ? (
+              <MenuList>
+                {restaurantData.menu.map((item, index) => (
+                  <MenuItem key={index}>
+                    {item.name} - {item.price}원
+                  </MenuItem>
+                ))}
+              </MenuList>
+            ) : (
+              <NoMenuMessage>메뉴 정보가 없습니다.</NoMenuMessage>
+            )}
           </MenuSection>
         </Card>
       </CardContainer>
@@ -134,7 +143,7 @@ const Restaurant = () => {
           ) : (
             reviews.map((review, index) => (
               <ReviewCard key={index}>
-                <ReviewNickname>{review.user_id}:</ReviewNickname>{" "}
+                <ReviewNickname>익명의 누군가</ReviewNickname>{" "}
                 {review.content}
               </ReviewCard>
             ))
@@ -247,6 +256,12 @@ const MenuItem = styled.li`
   font-size: 1.2rem;
   margin-bottom: 8px;
   color: #2c3e50;
+`;
+
+const NoMenuMessage = styled.div`
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  text-align: center;
 `;
 
 const ReviewSection = styled.div`

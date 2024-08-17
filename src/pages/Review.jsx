@@ -45,15 +45,19 @@ const Review = () => {
     }
 
     const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
-    const reviewData = {
-      user_id: 1, // Replace with actual user ID if available
-      store_id: restaurantId,
-      content: finalReview,
-      grade: 5, // Assuming a static grade, adjust as needed
-    };
+    const reviewData = new FormData();
+    reviewData.append('user_id', 1); // Replace with actual user ID if available
+    reviewData.append('store_id', restaurantId);
+    reviewData.append('content', finalReview);
+    reviewData.append('grade', 4); // Assuming a grade of 4, adjust as needed
 
     try {
-      const response = await axios.post('http://52.78.88.248/api/review/upload', reviewData);
+      const response = await axios.post('http://52.78.88.248/api/review/upload', reviewData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
       if (response.status === 200) {
         alert("리뷰가 제출되었습니다!");
         navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동

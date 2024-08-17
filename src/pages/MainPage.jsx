@@ -29,26 +29,27 @@ const ResetBnt = styled.button`
   border-radius: 10px;
   color: #3a9918;
   font-weight: 600;
+  cursor: pointer;
 `;
 
 const MainPage = () => {
-  const [selectedMenuValue, setSelectedMenuValue] =
-    useState("메뉴를 선택해주세요");
-  const [selectedPriceValue, setSelectedPriceValue] =
-    useState("가격대를 골라주세요");
+  const [selectedMenuValue, setSelectedMenuValue] = useState("메뉴를 선택해주세요");
+  const [selectedPriceValue, setSelectedPriceValue] = useState("가격대를 골라주세요");
   const [selectedList, setSelectedList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [originalData, setOriginalData] = useState([]); // To store the original data
+  const [originalData, setOriginalData] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const [categories, setCategories] = useState([]);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     setIsHidden(true);
-  };
+  }, []);
 
   const handleMenuSelected = useCallback((event) => {
     const selectedMenu = event.target.innerText;
+    console.log(`Menu selected: ${selectedMenu}`);
     setSelectedMenuValue(selectedMenu);
     setSelectedList((prevList) =>
       prevList.includes(selectedMenu) ? prevList : [...prevList, selectedMenu]
@@ -57,6 +58,7 @@ const MainPage = () => {
 
   const handlePriceSelected = useCallback((event) => {
     const selectedPrice = event.target.innerText;
+    console.log(`Price selected: ${selectedPrice}`);
     setSelectedPriceValue(selectedPrice);
     setSelectedList((prevList) =>
       prevList.includes(selectedPrice) ? prevList : [...prevList, selectedPrice]
@@ -65,67 +67,98 @@ const MainPage = () => {
 
   const handleClickKeyword = useCallback((event) => {
     const selectedKeyword = event.target.innerText;
+    console.log(`Keyword clicked for removal: ${selectedKeyword}`);
     setSelectedList((prevList) =>
       prevList.filter((keyword) => keyword !== selectedKeyword)
     );
   }, []);
 
+  // Reset logic enhancement
   const handleReset = useCallback(() => {
+    console.log("Resetting filters");
     setSelectedList([]);
-    setFilteredData(originalData); // Reset to original data when filters are cleared
+    setFilteredData(originalData);
+    setSelectedMenuValue("메뉴를 선택해주세요");
+    setSelectedPriceValue("가격대를 골라주세요");
   }, [originalData]);
 
-  const handleIsOpen = () => {
+  const handleIsOpen = useCallback(() => {
     setIsOpenModal(!isOpenModal);
-  };
+  }, [isOpenModal]);
 
   const fetchStoresData = useCallback(async (latitude, longitude) => {
     try {
+      console.log(`Fetching stores data at location: ${latitude}, ${longitude}`);
       const response = await fetch(
         `http://52.78.88.248/api/stores/search?latitude=${latitude}&longitude=${longitude}&range=2000`
       );
       const data = await response.json();
-      setOriginalData(data); // Store original data
-      setFilteredData(data); // Set initial filtered data
+      setOriginalData(data);
+      setFilteredData(data);
+
+      const uniqueCategories = [...new Set(data.map((store) => store.category))];
+      console.log("Unique categories fetched:", uniqueCategories);
+      setCategories(uniqueCategories);
     } catch (error) {
       console.error("Error fetching stores data:", error);
     }
   }, []);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          fetchStoresData(latitude, longitude);
-        },
-        (error) => {
-          console.error("Error getting current location:", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, [fetchStoresData]);
+  const handleLocationError = (error) => {
+    const errorMessages = {
+      1: "User denied the request for Geolocation.",
+      2: "Location information is unavailable.",
+      3: "The request to get user location timed out.",
+      0: "An unknown error occurred.",
+    };
+    console.error(errorMessages[error.code] || errorMessages[0]);
+  };
 
+  const handleLocationSuccess = ({ coords: { latitude, longitude } }) => {
+    console.log("User location obtained:", { latitude, longitude });
+    fetchStoresData(latitude, longitude);
+  };
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError);
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
+}, [fetchStoresData]);
+
+
+  // Enhanced filtering logic using category instead of menu
   useEffect(() => {
     if (selectedList.length === 0) {
-      setFilteredData(originalData); // Show all data if no filters are selected
+      console.log("No filters selected, displaying original data.");
+      setFilteredData(originalData);
     } else {
+      console.log("Filtering data based on selected list:", selectedList);
       const filtered = originalData.filter((store) => {
-        const matchMenu = selectedList.some(
-          (item) => store.menu && store.menu.includes(item)
-        );
-        const matchPrice = selectedList.some(
-          (item) => store.priceRange && store.priceRange.includes(item)
-        );
-        return matchMenu || matchPrice;
+        const categoryMatch = selectedList.some((selected) => store.category && store.category.includes(selected));
+        console.log(`Checking store "${store.name}" (Category: ${store.category})`);
+        console.log(`Category match: ${categoryMatch}`);
+
+        const categoryFilterActive = selectedList.some(keyword => categories.includes(keyword));
+        console.log(`Category filter active: ${categoryFilterActive}`);
+
+        if (categoryFilterActive) {
+          console.log(`Store "${store.name}" included: ${categoryMatch}`);
+          return categoryMatch;
+        } else {
+          console.log(`Store "${store.name}" included: true (no active filters)`);
+          return true;
+        }
       });
+      console.log("Filtered data:", filtered);
       setFilteredData(filtered);
     }
-  }, [selectedList, originalData]);
+  }, [selectedList, originalData, categories]);
+
 
   const handleMarkerClick = useCallback((restaurant) => {
+    console.log("Restaurant marker clicked:", restaurant.name);
     setSelectedRestaurant(restaurant);
   }, []);
 
@@ -136,13 +169,14 @@ const MainPage = () => {
           <MenuDropdown
             onClick={handleMenuSelected}
             selectedDropValue={selectedMenuValue}
+            categories={categories}
           />
           <PriceDropdown
             onClick={handlePriceSelected}
             selectedDropValue={selectedPriceValue}
           />
         </DropdownContainer>
-        <ResetBnt onClick={handleReset}>reset</ResetBnt>
+        <ResetBnt onClick={handleReset}>Reset</ResetBnt>
       </SelectContainer>
       <KeywordContainer>
         {selectedList.map((el) => (
@@ -170,7 +204,6 @@ const MainPage = () => {
             공유해드리겠습니다.
           </Content>
           <Content>samdasu@jjddai.com</Content>
-
           <Check onClick={handleIsOpen}>확인</Check>
         </ModalContainer>
       )}
@@ -178,7 +211,6 @@ const MainPage = () => {
     </PageContainer>
   );
 };
-
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -220,12 +252,14 @@ const ClickText = styled.span`
   font-weight: 500;
   background-color: #edffe6;
   color: #3a9918;
+  cursor: pointer;
 `;
 
 const Close = styled.button`
   border: none;
   background-color: white;
   font-weight: 900;
+  cursor: pointer;
 `;
 
 const ModalContainer = styled.div`
@@ -239,7 +273,6 @@ const ModalContainer = styled.div`
   position: absolute;
   top: 200px;
   left: 100px;
-
   z-index: 2;
   background-color: white;
   border: 1px solid black;
@@ -264,6 +297,7 @@ const Check = styled.button`
   font-size: 12px;
   font-weight: 900;
   margin-top: 20px;
+  cursor: pointer;
 `;
 
 export default MainPage;

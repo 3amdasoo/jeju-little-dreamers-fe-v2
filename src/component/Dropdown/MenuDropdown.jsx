@@ -1,22 +1,6 @@
 import { useState, useCallback } from "react";
 import styled from "styled-components";
 
-const menuList = [
-  { id: 1, value: "분식" },
-  { id: 2, value: "편의점" },
-  { id: 3, value: "마트" },
-  { id: 4, value: "정육점" },
-  { id: 5, value: "양식" },
-  { id: 6, value: "중식당" },
-  { id: 7, value: "치킨" },
-  { id: 8, value: "카페" },
-  { id: 9, value: "디저트" },
-  { id: 10, value: "한식" },
-  { id: 11, value: "돈가스" },
-  { id: 12, value: "일식당" },
-  { id: 13, value: "베이커리" },
-];
-
 const Container = styled.div`
   position: relative;
 `;
@@ -70,7 +54,7 @@ const ListContainer = styled.div`
   padding: 3px;
 `;
 
-const MenuDropdown = ({ onClick, selectedDropValue }) => {
+const MenuDropdown = ({ onClick, selectedDropValue, categories }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -92,9 +76,9 @@ const MenuDropdown = ({ onClick, selectedDropValue }) => {
       </BoxContainer>
       {isOpen && (
         <ListContainer>
-          {menuList.map((el) => (
-            <DropBox key={el.id} onClick={handleItemClick}>
-              {el.value}
+          {categories.map((category, index) => (
+            <DropBox key={index} onClick={handleItemClick}>
+              {category}
             </DropBox>
           ))}
         </ListContainer>
