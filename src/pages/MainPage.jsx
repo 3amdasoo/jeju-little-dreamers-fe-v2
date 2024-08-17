@@ -90,7 +90,7 @@ const MainPage = () => {
     try {
       console.log(`Fetching stores data at location: ${latitude}, ${longitude}`);
       const response = await fetch(
-        `/api/stores/search?latitude=${latitude}&longitude=${longitude}&range=2000`
+        `http://52.78.88.248/api/stores/search?latitude=${latitude}&longitude=${longitude}&range=2000`
       );
       const data = await response.json();
       setOriginalData(data);
