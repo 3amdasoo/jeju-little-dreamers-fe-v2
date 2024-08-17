@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import title from "../../assets/logoTitle.png";
+import title from "../../assets/logoImg.png";
 
 const HeaderStyle = styled.header`
   width: 100%;
@@ -13,7 +13,7 @@ const HeaderStyle = styled.header`
 `;
 
 const TitleImg = styled.img`
-  width: 500px;
+  width: 300px;
 `;
 
 const Header = () => {

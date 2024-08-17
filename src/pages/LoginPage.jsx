@@ -1,6 +1,7 @@
 import React from "react";
 import kakao_login_button_img from "../assets/kakao_login.png";
 import logo from "../assets/logo.png";
+import logoTitle from "../assets/logoImg.png";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -26,7 +27,7 @@ const Subtitle = styled.h2`
 `;
 
 const Logo = styled.img`
-  width: 150px;
+  width: 200px;
 `;
 
 const KakaoLoginButton = styled.button`
@@ -34,7 +35,7 @@ const KakaoLoginButton = styled.button`
   border: none;
   cursor: pointer;
 
-  margin-top: 50px;
+  margin-top: 100px;
 `;
 
 const KakaoLoginImage = styled.img`
@@ -53,8 +54,9 @@ const LoginPage = () => {
   return (
     <Container>
       <Logo src={logo} alt="Logo" />
-      <Title>제주 꼬망이들</Title>
-      <Subtitle>제주 아동급식 카드 가맹점 찾기 서비스</Subtitle>
+      <TitleImg src={logoTitle} />
+      {/* <Title >제주 꼬망이들</Title> */}
+      {/* <Subtitle>제주 아동급식 카드 가맹점 찾기 서비스</Subtitle> */}
       <KakaoLoginButton onClick={handleLogin}>
         <KakaoLoginImage src={kakao_login_button_img} alt="카카오 로그인" />
       </KakaoLoginButton>
@@ -63,3 +65,7 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const TitleImg = styled.img`
+  width: 400px;
+`;
