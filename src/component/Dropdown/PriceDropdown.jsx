@@ -59,7 +59,7 @@ const ListContainer = styled.div`
   padding: 3px;
 `;
 
-const PriceDropdown = ({ onClick, selectedDropValue }) => {
+const PriceDropdown = ({ onClick, onSelect, selectedDropValue }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdown, setIsDropdown] = useState(false);
 
@@ -70,7 +70,7 @@ const PriceDropdown = ({ onClick, selectedDropValue }) => {
   const handleItemClick = useCallback(
     (event) => {
       onClick(event);
-      setIsDropdown(false); // 메뉴 아이템 클릭 시 드롭다운 닫기
+      setIsOpen(false); // 메뉴 아이템 클릭 시 드롭다운 닫기
     },
     [onClick]
   );
@@ -83,7 +83,7 @@ const PriceDropdown = ({ onClick, selectedDropValue }) => {
       {isOpen && (
         <ListContainer>
           {priceList.map((el) => (
-            <DropBox onClick={handleItemClick}>{el.value}</DropBox>
+            <DropBox key={el.id} onClick={handleItemClick}>{el.value}</DropBox>
           ))}
         </ListContainer>
       )}

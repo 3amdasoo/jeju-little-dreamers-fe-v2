@@ -72,7 +72,6 @@ const ListContainer = styled.div`
 
 const MenuDropdown = ({ onClick, selectedDropValue }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDropdown, setIsDropdown] = useState(false);
 
   const handleOpen = () => {
     setIsOpen(!isOpen);
@@ -81,7 +80,7 @@ const MenuDropdown = ({ onClick, selectedDropValue }) => {
   const handleItemClick = useCallback(
     (event) => {
       onClick(event);
-      setIsDropdown(false); // 메뉴 아이템 클릭 시 드롭다운 닫기
+      setIsOpen(false); // 메뉴 아이템 클릭 시 드롭다운 닫기
     },
     [onClick]
   );
@@ -94,7 +93,9 @@ const MenuDropdown = ({ onClick, selectedDropValue }) => {
       {isOpen && (
         <ListContainer>
           {menuList.map((el) => (
-            <DropBox onClick={handleItemClick}>{el.value}</DropBox>
+            <DropBox key={el.id} onClick={handleItemClick}>
+              {el.value}
+            </DropBox>
           ))}
         </ListContainer>
       )}
