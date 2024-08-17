@@ -61,8 +61,6 @@ const Review = () => {
                 value={customReview}
                 onChange={handleCustomReviewChange}
             />
-
-            <ReviewLabel>리뷰를 선택하세요:</ReviewLabel>
             <ButtonContainer>
                 {predefinedReviews.map((review, index) => {
                     if (index % 2 === 0) {
@@ -128,12 +126,6 @@ const Textarea = styled.textarea`
     box-sizing: border-box;
 `;
 
-const ReviewLabel = styled.p`
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #34495e;
-`;
 
 const ButtonContainer = styled.div`
     display: flex;
