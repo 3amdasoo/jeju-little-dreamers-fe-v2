@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 
 const Review = () => {
     const location = useLocation();
@@ -28,10 +28,8 @@ const Review = () => {
         const polarOppositeReviewId = selectedReview.polarOpposite;
 
         if (selectedReviews.includes(id)) {
-            // 이미 선택된 리뷰라면 선택 해제
             setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
         } else {
-            // 반대되는 리뷰는 제외하고 현재 리뷰를 선택
             setSelectedReviews([
                 ...selectedReviews.filter(reviewId => reviewId !== polarOppositeReviewId),
                 id
@@ -39,18 +37,32 @@ const Review = () => {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const finalReview = customReview || selectedReviews.map(id => predefinedReviews.find(review => review.id === id).label).join(', ');
-        if (finalReview) {
-            console.log(`리뷰 제출: ${finalReview}`);
-            alert("리뷰가 제출되었습니다!");
-            // 이전 페이지로 돌아가기
-            const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
-            navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동
-        } else {
+        if (!finalReview) {
             alert("리뷰를 작성하거나 선택해주세요.");
+            return;
+        }
+
+        const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
+        const reviewData = {
+            user_id: 1, // Replace with actual user ID if available
+            store_id: restaurantId,
+            content: finalReview,
+            grade: 5, // Assuming a static grade, adjust as needed
+        };
+
+        try {
+            await axios.post('/api/review/upload', reviewData);
+            alert("리뷰가 제출되었습니다!");
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            alert("리뷰 제출 중 오류가 발생했습니다.");
+        } finally {
+            navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동
         }
     };
+
     return (
         <Container>
             <h1>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</h1>
@@ -125,7 +137,6 @@ const Textarea = styled.textarea`
     margin-bottom: 30px;
     box-sizing: border-box;
 `;
-
 
 const ButtonContainer = styled.div`
     display: flex;

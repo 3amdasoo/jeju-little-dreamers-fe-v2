@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const Restaurant = () => {
     const [restaurantData, setRestaurantData] = useState(null);
@@ -9,45 +10,46 @@ const Restaurant = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        const dummyData = {
-            id: "033ca46a84ac226ae7642a67571e4bad",
-            store: {
-                id: "35089491",
-                name: "은희네해장국 서귀포점",
-                address: "제주특별자치도 서귀포시 토평동 1001-7",
-                phone: "064-767-0039",
-                category: "한식, 해장국",
-                latitude: 33.260485,
-                longitude: 126.5821782,
-                image: null,
-            },
-            menu: [
-                {
-                    name: "소고기해장국",
-                    price: "10,000",
-                },
-            ],
+        const fetchRestaurantData = async () => {
+            try {
+                const menuResponse = await axios.get(`/api/stores/menu`, {
+                    params: { storeId: id },
+                });
+
+                const reviewResponse = await axios.get(`/api/stores/review`, {
+                    params: { storeId: id },
+                });
+
+                if (menuResponse.data && menuResponse.data.length > 0) {
+                    const storeData = menuResponse.data[0].store;
+                    const menuItems = menuResponse.data.map((item) => ({
+                        name: item.name,
+                        price: item.price,
+                    }));
+                    setRestaurantData({
+                        ...storeData,
+                        menu: menuItems,
+                    });
+                }
+
+                if (reviewResponse.data) {
+                    const fetchedReviews = reviewResponse.data.map((review) => ({
+                        nickname: `익명${review.id}`, // or map to actual nickname if available
+                        content: review.content,
+                    }));
+                    setReviews(fetchedReviews);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
 
-        const dummyReviews = [
-        { nickname: "익명1", content: "음식이 정말 맛있었어요. 다시 가고 싶네요!" },
-        { nickname: "익명2", content: "직원분들이 너무 친절하셨어요. 기분 좋게 식사했습니다." },
-        { nickname: "익명3", content: "아동급식카드도 사용 가능해서 좋았습니다." },
-        { nickname: "익명4", content: "재료가 신선하고, 음식도 깔끔했어요." },
-        { nickname: "익명5", content: "가격 대비 음식의 품질이 훌륭해요. 강추합니다!" },
-        { nickname: "익명6", content: "혼자 먹기에도 편한 분위기였어요. 종종 들를 것 같아요." },
-        { nickname: "익명7", content: "매장이 정말 청결해서 안심하고 먹을 수 있었어요." },
-        { nickname: "익명8", content: "양이 푸짐해서 배부르게 먹고 왔어요." },
-    ];
-
-
-        setRestaurantData(dummyData);
-        setReviews(dummyReviews);
-    }, []);
+        fetchRestaurantData();
+    }, [id]);
 
     const handleWriteReview = () => {
         navigate(`/restaurant/${id}/review`, {
-            state: { restaurantName: restaurantData.store.name }
+            state: { restaurantName: restaurantData.name },
         });
     };
 
@@ -59,10 +61,10 @@ const Restaurant = () => {
         <Container>
             <Card>
                 <RestaurantInfo>
-                    <RestaurantName>{restaurantData.store.name}</RestaurantName>
-                    <RestaurantDetail><strong>주소:</strong> {restaurantData.store.address}</RestaurantDetail>
-                    <RestaurantDetail><strong>전화번호:</strong> {restaurantData.store.phone}</RestaurantDetail>
-                    <RestaurantDetail><strong>카테고리:</strong> {restaurantData.store.category}</RestaurantDetail>
+                    <RestaurantName>{restaurantData.name}</RestaurantName>
+                    <RestaurantDetail><strong>주소:</strong> {restaurantData.address}</RestaurantDetail>
+                    <RestaurantDetail><strong>전화번호:</strong> {restaurantData.phone}</RestaurantDetail>
+                    <RestaurantDetail><strong>카테고리:</strong> {restaurantData.category}</RestaurantDetail>
                 </RestaurantInfo>
             </Card>
             <Card>
@@ -96,6 +98,7 @@ const Restaurant = () => {
 
 export default Restaurant;
 
+// Styled components remain unchanged
 const Container = styled.div`
     padding: 20px;
     background-color: #f9f9f9;
