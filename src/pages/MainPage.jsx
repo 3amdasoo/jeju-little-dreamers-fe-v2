@@ -144,7 +144,7 @@ const MainPage = () => {
           />
           <PriceDropdown
             onClick={handleMenuSelected}
-            selectedDropValue={selectedMenuValue}
+            selectedDropValue={selectedPriceValue}
           />
         </DropdownContainer>
         <ResetBnt onClick={handleReset}>reset</ResetBnt>

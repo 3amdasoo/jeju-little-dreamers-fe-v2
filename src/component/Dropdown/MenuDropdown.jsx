@@ -89,7 +89,7 @@ const MenuDropdown = ({ onClick, selectedDropValue }) => {
   return (
     <Container>
       <BoxContainer onClick={handleOpen}>
-        <SelectBox>메뉴를 골라주세요</SelectBox>
+        <SelectBox>{selectedDropValue}</SelectBox>
       </BoxContainer>
       {isOpen && (
         <ListContainer>
