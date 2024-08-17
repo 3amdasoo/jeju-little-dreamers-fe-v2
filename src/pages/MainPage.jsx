@@ -33,9 +33,9 @@ const ResetBnt = styled.button`
 `;
 
 const MainPage = () => {
-  const [selectedMenuValue, setSelectedMenuValue] = useState("오늘 어떤 메뉴?");
+  const [selectedMenuValue, setSelectedMenuValue] = useState("메뉴를 선택해주세요");
   const [selectedPriceValue, setSelectedPriceValue] =
-    useState("오늘 얼마쓸지!");
+    useState("가격대를 골라주세요");
   const [selected_list, setSelected_list] = useState([]);
   const [filteredDummy, setFilteredDummy] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -143,7 +143,7 @@ const MainPage = () => {
             selectedDropValue={selectedMenuValue}
           />
           <PriceDropdown
-            onClick={handleMenuSelected}
+            onClick={handlePriceSelected}
             selectedDropValue={selectedPriceValue}
           />
         </DropdownContainer>

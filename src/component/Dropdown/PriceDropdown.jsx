@@ -78,7 +78,7 @@ const PriceDropdown = ({ onClick, selectedDropValue }) => {
   return (
     <Container>
       <BoxContainer onClick={handleOpen}>
-        <SelectBox>가격대를 골라주세요</SelectBox>
+        <SelectBox>{selectedDropValue}</SelectBox>
       </BoxContainer>
       {isOpen && (
         <ListContainer>
