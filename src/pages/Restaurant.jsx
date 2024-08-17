@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const Restaurant = () => {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -148,6 +149,7 @@ const ReviewBox = styled.div`
 const ReviewContent = styled.div``;
 const Count = styled.div``;
 
+// Styled components remain unchanged
 const Container = styled.div`
   padding: 20px;
   background-color: white;
