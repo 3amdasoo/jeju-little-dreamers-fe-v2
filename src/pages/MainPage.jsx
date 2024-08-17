@@ -155,12 +155,12 @@ const MainPage = () => {
         ))}
       </KeywordContainer>
       <Map filteredData={filteredDummy} onMarkerClick={handleMarkerClick} />
-      <AreYouSlaveContainer hidden={isHidden} onClick={handleClick}>
+      <AreYouSlaveContainer hidden={isHidden}>
         <AreYouSlave>공무원이신가요?</AreYouSlave>
         <ClickText onClick={handleIsOpen}>
           필터링된 가맹점 자료를 이메일로..
         </ClickText>
-        <Close>X</Close>
+        <Close onClick={handleClick}>X</Close>
       </AreYouSlaveContainer>
       {isOpenModal && (
         <ModalContainer>
@@ -216,11 +216,14 @@ const AreYouSlaveContainer = styled.div`
 const AreYouSlave = styled.span`
   font-size: 15px;
   font-weight: 500;
+
 `;
 
 const ClickText = styled.span`
   font-size: 15px;
   font-weight: 500;
+  background-color: #EDFFE6;
+  color: #3a9918;
 `;
 
 const Close = styled.button`

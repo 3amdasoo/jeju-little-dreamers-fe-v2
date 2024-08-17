@@ -9,7 +9,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: white;
   padding: 20px;
 `;
 
@@ -59,6 +59,6 @@ const LoginPage = () => {
       </KakaoLoginButton>
     </Container>
   );
-}
+};
 
 export default LoginPage;
