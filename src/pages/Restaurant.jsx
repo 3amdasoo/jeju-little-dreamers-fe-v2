@@ -126,7 +126,7 @@ const Restaurant = () => {
           ) : (
             reviews.map((review, index) => (
               <ReviewCard key={index}>
-                <ReviewNickname>{review.user_id}:</ReviewNickname>{" "}
+                <ReviewNickname>익명의 누군가</ReviewNickname>{" "}
                 {review.content}
               </ReviewCard>
             ))
