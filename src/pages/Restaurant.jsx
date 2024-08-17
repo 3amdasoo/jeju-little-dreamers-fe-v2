@@ -97,45 +97,47 @@ export default Restaurant;
 
 const Container = styled.div`
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #f9f9f9;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-width: 800px;
+    gap: 30px;
+    max-width: 900px;
     margin: 0 auto;
     font-family: "Noto Sans", sans-serif;
 `;
 
 const Card = styled.div`
     background-color: #ffffff;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
 `;
 
 const RestaurantInfo = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 `;
 
 const RestaurantName = styled.h1`
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #333;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
 `;
 
 const RestaurantDetail = styled.p`
-    font-size: 1rem;
-    margin: 5px 0;
-    color: #666;
+    font-size: 1.1rem;
+    margin: 7px 0;
+    color: #7f8c8d;
 `;
 
-const MenuSection = styled.div``;
+const MenuSection = styled.div`
+    margin-top: 20px;
+`;
 
 const MenuTitle = styled.h2`
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #444;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #34495e;
 `;
 
 const MenuList = styled.ul`
@@ -143,53 +145,54 @@ const MenuList = styled.ul`
 `;
 
 const MenuItem = styled.li`
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-    color: #555;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #2c3e50;
 `;
 
 const ReviewSection = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    margin-top: 30px;
 `;
 
 const ReviewTitle = styled.h2`
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #444;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #34495e;
 `;
 
 const ReviewList = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 `;
 
 const ReviewCard = styled.div`
-    background-color: #ffffff;
+    background-color: #f7f9fa;
     border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
 `;
 
 const ReviewNickname = styled.span`
     font-weight: bold;
     color: #2980b9;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 `;
 
 const WriteReviewButton = styled.button`
-    padding: 10px 20px;
+    padding: 12px 25px;
     background-color: #3498db;
     color: #fff;
-    font-size: 1rem;
+    font-size: 1.1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     align-self: flex-end;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     transition: background-color 0.3s ease;
 
     &:hover {

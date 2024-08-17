@@ -98,36 +98,41 @@ export default Review;
 const Container = styled.div`
     max-width: 500px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px 20px;
+    background-color: #f7f9fa;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 const Description = styled.p`
     margin-top: 20px;
-    font-size: 1rem;
-    color: #555;
+    font-size: 1.1rem;
+    color: #7f8c8d;
 `;
 
 const Textarea = styled.textarea`
-    width: 95%;
-    height: 100px;
+    width: 100%;
+    height: 120px;
     margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px;
+    border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 1rem;
     resize: none;
     margin-bottom: 30px;
+    box-sizing: border-box;
 `;
 
 const ReviewLabel = styled.p`
     margin-bottom: 10px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
+    color: #34495e;
 `;
 
 const ButtonContainer = styled.div`
@@ -135,7 +140,6 @@ const ButtonContainer = styled.div`
     flex-direction: column;
     gap: 15px;
     margin-bottom: 40px;
-    justify-content: center;
 `;
 
 const ReviewPair = styled.div`
@@ -145,7 +149,7 @@ const ReviewPair = styled.div`
 `;
 
 const ReviewButton = styled.button`
-    padding: 12px 25px;
+    padding: 12px 20px;
     background-color: ${({ isSelected }) => (isSelected ? '#3498db' : '#ecf0f1')};
     color: ${({ isSelected }) => (isSelected ? '#fff' : '#333')};
     font-size: 1rem;
@@ -154,6 +158,7 @@ const ReviewButton = styled.button`
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
     flex: 1;
+    min-width: 120px;
 
     &:hover {
         background-color: ${({ isSelected }) => (isSelected ? '#2980b9' : '#bdc3c7')};
@@ -164,7 +169,7 @@ const SubmitButton = styled.button`
     padding: 15px;
     background-color: #2ecc71; 
     color: #fff;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
     border: none;
     border-radius: 8px;
@@ -175,4 +180,7 @@ const SubmitButton = styled.button`
         background-color: #27ae60; 
     }
     margin-top: 30px;
+    align-self: center;
+    width: 100%;
+    max-width: 200px;
 `;
