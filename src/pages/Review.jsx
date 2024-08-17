@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Review = () => {
   const location = useLocation();
@@ -27,46 +27,52 @@ const Review = () => {
     const selectedReview = predefinedReviews.find((review) => review.id === id);
     const polarOppositeReviewId = selectedReview.polarOpposite;
 
-        if (selectedReviews.includes(id)) {
-            setSelectedReviews(selectedReviews.filter(reviewId => reviewId !== id));
-        } else {
-            setSelectedReviews([
-                ...selectedReviews.filter(reviewId => reviewId !== polarOppositeReviewId),
-                id
-            ]);
-        }
+    if (selectedReviews.includes(id)) {
+      setSelectedReviews(selectedReviews.filter((reviewId) => reviewId !== id));
+    } else {
+      setSelectedReviews([
+        ...selectedReviews.filter(
+          (reviewId) => reviewId !== polarOppositeReviewId
+        ),
+        id,
+      ]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const finalReview =
+      customReview ||
+      selectedReviews
+        .map((id) => predefinedReviews.find((review) => review.id === id).label)
+        .join(", ");
+    if (!finalReview) {
+      alert("리뷰를 작성하거나 선택해주세요.");
+      return;
+    }
+
+    const restaurantId = location.pathname.split("/")[2]; // 현재 경로에서 식당 ID를 추출
+    const reviewData = {
+      user_id: 1, // Replace with actual user ID if available
+      store_id: restaurantId,
+      content: finalReview,
+      grade: 5, // Assuming a static grade, adjust as needed
     };
 
-    const handleSubmit = async () => {
-        const finalReview = customReview || selectedReviews.map(id => predefinedReviews.find(review => review.id === id).label).join(', ');
-        if (!finalReview) {
-            alert("리뷰를 작성하거나 선택해주세요.");
-            return;
-        }
+    try {
+      await axios.post("/api/review/upload", reviewData);
+      alert("리뷰가 제출되었습니다!");
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("리뷰 제출 중 오류가 발생했습니다.");
+    } finally {
+      navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동
+    }
+  };
 
-        const restaurantId = location.pathname.split('/')[2]; // 현재 경로에서 식당 ID를 추출
-        const reviewData = {
-            user_id: 1, // Replace with actual user ID if available
-            store_id: restaurantId,
-            content: finalReview,
-            grade: 5, // Assuming a static grade, adjust as needed
-        };
-
-        try {
-            await axios.post('/api/review/upload', reviewData);
-            alert("리뷰가 제출되었습니다!");
-        } catch (error) {
-            console.error("Error submitting review:", error);
-            alert("리뷰 제출 중 오류가 발생했습니다.");
-        } finally {
-            navigate(`/restaurant/${restaurantId}`); // /restaurant/:id 경로로 이동
-        }
-    };
-
-    return (
-        <Container>
-            <h1>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</h1>
-            <Description>리뷰는 익명으로 작성됩니다.</Description>
+  return (
+    <Container>
+      <h1>{restaurantName ? `${restaurantName}` : "리뷰 작성"}</h1>
+      <Description>리뷰는 익명으로 작성됩니다</Description>
 
       <Textarea
         placeholder="리뷰를 입력해주세요..."
@@ -109,9 +115,9 @@ export default Review;
 
 const Container = styled.div`
   max-width: 500px;
-  margin: 0 auto;
+  margin: 10px auto;
   padding: 30px 20px;
-  background-color: #f7f9fa;
+  background-color: white;
   border-radius: 12px;
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -155,7 +161,7 @@ const ReviewPair = styled.div`
 
 const ReviewButton = styled.button`
   padding: 12px 20px;
-  background-color: ${({ isSelected }) => (isSelected ? "#3498db" : "#ecf0f1")};
+  background-color: ${({ isSelected }) => (isSelected ? "#2ecc71" : "#ecf0f1")};
   color: ${({ isSelected }) => (isSelected ? "#fff" : "#333")};
   font-size: 1rem;
   border: none;
@@ -167,7 +173,7 @@ const ReviewButton = styled.button`
 
   &:hover {
     background-color: ${({ isSelected }) =>
-      isSelected ? "#2980b9" : "#bdc3c7"};
+      isSelected ? "#2ecc71" : "#bdc3c7"};
   }
 `;
 

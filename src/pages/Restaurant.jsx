@@ -133,7 +133,7 @@ const Restaurant = () => {
         <ReviewList>
           {reviews.map((review, index) => (
             <ReviewCard key={index}>
-              <ReviewNickname>{review.nickname}:</ReviewNickname>{" "}
+              <ReviewNickname>{review.nickname}</ReviewNickname>{" "}
               {review.content}
             </ReviewCard>
           ))}
@@ -158,19 +158,32 @@ const ReviewBoxContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
-const ReviewBox = styled.div``;
+const ReviewBox = styled.div`
+  margin-bottom: 5px;
+`;
 
 const RateBox = styled.div`
   width: auto;
-  background-color: blueviolet;
+  background-color: #ff7777;
   display: flex;
   flex-direction: row;
+  border-radius: 5px;
 `;
 
-const ReviewContent = styled.div``;
+const ReviewContent = styled.h3`
+  margin: 0px 0px 3px;
+`;
+
 const Count = styled.div`
-  background-color: yellow;
+  background-color: #2ecc71;
+  text-align: center;
+  color: white;
   width: 320px;
+  height: 25px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Container = styled.div`
@@ -179,7 +192,7 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
   max-width: 900px;
   margin: 0 auto;
   font-family: "Noto Sans", sans-serif;
@@ -190,7 +203,7 @@ const CardContainer = styled.div`
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-  gap: 15px;
+  /* gap: 5px; */
 `;
 
 const Card = styled.div`
@@ -267,29 +280,29 @@ const ReviewCard = styled.div`
   background-color: #f7f9fa;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
 `;
 
 const ReviewNickname = styled.span`
   font-weight: bold;
-  color: #2980b9;
+  color: black;
   display: block;
   margin-bottom: 10px;
 `;
 
 const WriteReviewButton = styled.button`
   padding: 12px 25px;
-  background-color: #3498db;
-  color: #fff;
+  color: #333;
   font-size: 1.1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  align-self: flex-end;
-  margin-bottom: 25px;
+  /* align-self: flex-end; */
+  /* margin-bottom: 25px; */
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #2980b9;
+    background-color: #2ecc71;
+    color: white;
   }
 `;

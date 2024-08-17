@@ -6,7 +6,7 @@ import Map from "../component/Map/Map";
 import nearbyData from "../../src/data/nearby.json";
 import menuData from "../../src/data/menu.json";
 import SelectBox from "../component/SelectBox";
-
+import InfoCard from "./InfoCard";
 
 const SelectContainer = styled.div`
   display: flex;
@@ -179,6 +179,7 @@ const MainPage = () => {
           <Check onClick={handleIsOpen}>확인</Check>
         </ModalContainer>
       )}
+      {selectedRestaurant && <InfoCard restaurantData={selectedRestaurant} />}
     </PageContainer>
   );
 };
