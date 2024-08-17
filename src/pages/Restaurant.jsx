@@ -5,62 +5,60 @@ import { useNavigate, useParams } from "react-router-dom";
 const Restaurant = () => {
   const [restaurantData, setRestaurantData] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [reviewsLoaded, setReviewsLoaded] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    const dummyData = {
-      id: "033ca46a84ac226ae7642a67571e4bad",
-      store: {
-        id: "35089491",
-        name: "은희네해장국 서귀포점",
-        address: "제주특별자치도 서귀포시 토평동 1001-7",
-        phone: "064-767-0039",
-        category: "한식, 해장국",
-        latitude: 33.260485,
-        longitude: 126.5821782,
-        image: null,
-      },
-      menu: [
-        {
-          name: "소고기해장국",
-          price: "10,000",
-        },
-      ],
+    const fetchRestaurantData = async () => {
+      try {
+        const response = await axios.get(`http://52.78.88.248/api/stores/menu`, {
+          params: {
+            storeId: id,
+          },
+        });
+
+        if (response.data.length > 0) {
+          const fetchedData = response.data[0];
+          const formattedData = {
+            id: fetchedData.id,
+            store: fetchedData.store,
+            menu: response.data.map(item => ({
+              name: item.name,
+              price: item.price,
+            })),
+          };
+          setRestaurantData(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching restaurant data:", error);
+      }
     };
 
-    const dummyReviews = [
-      {
-        nickname: "익명1",
-        content: "음식이 정말 맛있었어요. 다시 가고 싶네요!",
-      },
-      {
-        nickname: "익명2",
-        content: "직원분들이 너무 친절하셨어요. 기분 좋게 식사했습니다.",
-      },
-      {
-        nickname: "익명3",
-        content: "아동급식카드도 사용 가능해서 좋았습니다.",
-      },
-      { nickname: "익명4", content: "재료가 신선하고, 음식도 깔끔했어요." },
-      {
-        nickname: "익명5",
-        content: "가격 대비 음식의 품질이 훌륭해요. 강추합니다!",
-      },
-      {
-        nickname: "익명6",
-        content: "혼자 먹기에도 편한 분위기였어요. 종종 들를 것 같아요.",
-      },
-      {
-        nickname: "익명7",
-        content: "매장이 정말 청결해서 안심하고 먹을 수 있었어요.",
-      },
-      { nickname: "익명8", content: "양이 푸짐해서 배부르게 먹고 왔어요." },
-    ];
+    const fetchReviewsData = async () => {
+      try {
+        const response = await axios.get(`http://52.78.88.248/api/stores/review`, {
+          params: {
+            storeId: id,
+          },
+        });
 
-    setRestaurantData(dummyData);
-    setReviews(dummyReviews);
-  }, []);
+        if (response.data.length > 0) {
+          setReviews(response.data);
+        } else {
+          setReviews([]); // Set an empty array if there are no reviews
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        setReviews([]); // Handle error by setting an empty array
+      } finally {
+        setReviewsLoaded(true); // Mark that reviews have been loaded
+      }
+    };
+
+    fetchRestaurantData();
+    fetchReviewsData();
+  }, [id]);
 
   const handleWriteReview = () => {
     navigate(`/restaurant/${id}/review`, {
@@ -131,12 +129,16 @@ const Restaurant = () => {
           </ReviewBox>
         </ReviewBoxContainer>
         <ReviewList>
-          {reviews.map((review, index) => (
-            <ReviewCard key={index}>
-              <ReviewNickname>{review.nickname}</ReviewNickname>{" "}
-              {review.content}
-            </ReviewCard>
-          ))}
+          {reviewsLoaded && reviews.length === 0 ? (
+            <NoReviewsMessage>리뷰가 없습니다.</NoReviewsMessage>
+          ) : (
+            reviews.map((review, index) => (
+              <ReviewCard key={index}>
+                <ReviewNickname>{review.user_id}:</ReviewNickname>{" "}
+                {review.content}
+              </ReviewCard>
+            ))
+          )}
         </ReviewList>
       </ReviewSection>
     </Container>
@@ -158,6 +160,7 @@ const ReviewBoxContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
 const ReviewBox = styled.div`
   margin-bottom: 5px;
 `;
@@ -206,12 +209,7 @@ const CardContainer = styled.div`
   /* gap: 5px; */
 `;
 
-const Card = styled.div`
-  /* background-color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); */
-`;
+const Card = styled.div``;
 
 const RestaurantInfo = styled.div`
   padding-bottom: 15px;
@@ -305,4 +303,11 @@ const WriteReviewButton = styled.button`
     background-color: #2ecc71;
     color: white;
   }
+`;
+
+const NoReviewsMessage = styled.div`
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  text-align: center;
+  margin-top: 20px;
 `;

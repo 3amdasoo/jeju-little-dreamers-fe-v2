@@ -3,10 +3,8 @@ import MenuDropdown from "../component/Dropdown/MenuDropdown";
 import PriceDropdown from "../component/Dropdown/PriceDropdown";
 import styled from "styled-components";
 import Map from "../component/Map/Map";
-import nearbyData from "../../src/data/nearby.json";
-import menuData from "../../src/data/menu.json";
 import SelectBox from "../component/SelectBox";
-import InfoCard from "./InfoCard";
+import StoreInfo from "../component/StoreInfo";
 
 const SelectContainer = styled.div`
   display: flex;
@@ -38,8 +36,9 @@ const MainPage = () => {
     useState("메뉴를 선택해주세요");
   const [selectedPriceValue, setSelectedPriceValue] =
     useState("가격대를 골라주세요");
-  const [selected_list, setSelected_list] = useState([]);
-  const [filteredDummy, setFilteredDummy] = useState([]);
+  const [selectedList, setSelectedList] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [originalData, setOriginalData] = useState([]); // To store the original data
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -51,7 +50,7 @@ const MainPage = () => {
   const handleMenuSelected = useCallback((event) => {
     const selectedMenu = event.target.innerText;
     setSelectedMenuValue(selectedMenu);
-    setSelected_list((prevList) =>
+    setSelectedList((prevList) =>
       prevList.includes(selectedMenu) ? prevList : [...prevList, selectedMenu]
     );
   }, []);
@@ -59,77 +58,72 @@ const MainPage = () => {
   const handlePriceSelected = useCallback((event) => {
     const selectedPrice = event.target.innerText;
     setSelectedPriceValue(selectedPrice);
-    setSelected_list((prevList) =>
+    setSelectedList((prevList) =>
       prevList.includes(selectedPrice) ? prevList : [...prevList, selectedPrice]
     );
   }, []);
 
   const handleClickKeyword = useCallback((event) => {
     const selectedKeyword = event.target.innerText;
-    setSelected_list((prevList) =>
+    setSelectedList((prevList) =>
       prevList.filter((keyword) => keyword !== selectedKeyword)
     );
   }, []);
 
   const handleReset = useCallback(() => {
-    setSelected_list([]);
-  }, []);
+    setSelectedList([]);
+    setFilteredData(originalData); // Reset to original data when filters are cleared
+  }, [originalData]);
 
   const handleIsOpen = () => {
     setIsOpenModal(!isOpenModal);
   };
 
-  useEffect(() => {
-    const combinedData = nearbyData.map((store) => {
-      const matchedMenus = menuData.filter(
-        (menu) => menu.store_id === store.id
+  const fetchStoresData = useCallback(async (latitude, longitude) => {
+    try {
+      const response = await fetch(
+        `http://52.78.88.248/api/stores/search?latitude=${latitude}&longitude=${longitude}&range=2000`
       );
-      return { ...store, menu: matchedMenus };
-    });
-
-    let filtered = combinedData;
-
-    if (selected_list.length > 0) {
-      filtered = combinedData.filter((item) => {
-        const categoryMatch = selected_list.some((keyword) =>
-          item.category.includes(keyword)
-        );
-        const priceMatch = selected_list.some((keyword) => {
-          if (keyword === "5000원 이하") {
-            return (
-              item.menu.length === 0 ||
-              item.menu.some((menu) => {
-                if (typeof menu.price === "string") {
-                  return parseInt(menu.price.replace(/,/g, "")) <= 5000;
-                }
-                return false;
-              })
-            );
-          } else if (keyword === "5000~10000원") {
-            return item.menu.some((menu) => {
-              if (typeof menu.price === "string") {
-                const price = parseInt(menu.price.replace(/,/g, ""));
-                return price > 5000 && price <= 10000;
-              }
-              return false;
-            });
-          } else if (keyword === "10000원 이상") {
-            return item.menu.some((menu) => {
-              if (typeof menu.price === "string") {
-                return parseInt(menu.price.replace(/,/g, "")) > 10000;
-              }
-              return false;
-            });
-          }
-          return false;
-        });
-
-        return categoryMatch && priceMatch;
-      });
+      const data = await response.json();
+      setOriginalData(data); // Store original data
+      setFilteredData(data); // Set initial filtered data
+    } catch (error) {
+      console.error("Error fetching stores data:", error);
     }
+  }, []);
 
-    setFilteredDummy(filtered);
-  }, [selected_list]);
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchStoresData(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting current location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, [fetchStoresData]);
+
+  useEffect(() => {
+    if (selectedList.length === 0) {
+      setFilteredData(originalData); // Show all data if no filters are selected
+    } else {
+      const filtered = originalData.filter((store) => {
+        const matchMenu = selectedList.some(
+          (item) => store.menu && store.menu.includes(item)
+        );
+        const matchPrice = selectedList.some(
+          (item) => store.priceRange && store.priceRange.includes(item)
+        );
+        return matchMenu || matchPrice;
+      });
+      setFilteredData(filtered);
+    }
+  }, [selectedList, originalData]);
 
   const handleMarkerClick = useCallback((restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -151,11 +145,12 @@ const MainPage = () => {
         <ResetBnt onClick={handleReset}>reset</ResetBnt>
       </SelectContainer>
       <KeywordContainer>
-        {selected_list.map((el) => (
+        {selectedList.map((el) => (
           <SelectBox key={el} data={el} onClickKeyword={handleClickKeyword} />
         ))}
       </KeywordContainer>
-      <Map filteredData={filteredDummy} onMarkerClick={handleMarkerClick} />
+      <Map filteredData={filteredData} onMarkerClick={handleMarkerClick} />
+      {selectedRestaurant && <StoreInfo restaurant={selectedRestaurant} />}
       <AreYouSlaveContainer hidden={isHidden}>
         <AreYouSlave>공무원이신가요?</AreYouSlave>
         <ClickText onClick={handleIsOpen}>
@@ -179,7 +174,7 @@ const MainPage = () => {
           <Check onClick={handleIsOpen}>확인</Check>
         </ModalContainer>
       )}
-      {selectedRestaurant && <InfoCard restaurantData={selectedRestaurant} />}
+      {/* {selectedRestaurant && <nfoCard IrestaurantData={selectedRestaurant} />} */}
     </PageContainer>
   );
 };

@@ -1,25 +1,59 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code');
-    console.log("test");
+
     if (code) {
-      console.log('Authorization code:', code);
-      // 여기에 카카오 인가 코드 벡엔드에게 보내면 됩니다. 
-      navigate("/main");
+  console.log('Authorization code:', code);
+
+  const sendAuthCode = async () => {
+    try {
+      const response = await fetch(`http://52.78.88.248/api/callback?code=${code}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        navigate('/main');
+      } else {
+        throw new Error(`Failed to authenticate: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error sending authorization code:', error);
+      setError('Failed to process the authorization code. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  sendAuthCode();
+} else {
+  setLoading(false);
+  setError('Authorization code is missing.');
+}
   }, [location, navigate]);
+
+  if (loading) {
+    return <p>Processing authorization code...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div>
       <h1>Auth Page</h1>
-      <p>Processing authorization code...</p>
     </div>
   );
 };
