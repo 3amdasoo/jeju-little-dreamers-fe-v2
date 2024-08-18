@@ -59,7 +59,7 @@ const Review = () => {
 
     try {
       const response = await axios.post(
-        "http://52.78.88.248/api/review/upload",
+        "/api/review/upload",
         reviewData,
         {
           headers: {

@@ -15,7 +15,7 @@ const Restaurant = () => {
     const fetchRestaurantData = async () => {
       try {
         const response = await axios.get(
-          `http://52.78.88.248/api/stores/menu`,
+          `/api/stores/menu`,
           {
             params: {
               storeId: id,
@@ -51,7 +51,7 @@ const Restaurant = () => {
     const fetchReviewsData = async () => {
       try {
         const response = await axios.get(
-          `http://52.78.88.248/api/stores/review`,
+          `/api/stores/review`,
           {
             params: {
               storeId: id,

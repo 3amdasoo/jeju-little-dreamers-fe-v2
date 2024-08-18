@@ -16,7 +16,7 @@ const Auth = () => {
 
   const sendAuthCode = async () => {
     try {
-      const response = await fetch(`http://52.78.88.248/api/callback?code=${code}`, {
+      const response = await fetch(`/api/callback?code=${code}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
