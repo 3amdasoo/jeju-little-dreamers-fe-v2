@@ -137,19 +137,19 @@ const Restaurant = () => {
           <ReviewBox>
             <ReviewContent>맛있어요</ReviewContent>
             <RateBox>
-              <Count>23건</Count>
+              <Count1>23건</Count1>
             </RateBox>
           </ReviewBox>
           <ReviewBox>
             <ReviewContent>친절해요</ReviewContent>
             <RateBox>
-              <Count>23건</Count>
+              <Count2>20건</Count2>
             </RateBox>
           </ReviewBox>
           <ReviewBox>
             <ReviewContent>아동 급식카드를 받아요</ReviewContent>
             <RateBox>
-              <Count>23건</Count>
+              <Count3>28건</Count3>
             </RateBox>
           </ReviewBox>
         </ReviewBoxContainer>
@@ -225,7 +225,7 @@ const ReviewContent = styled.h3`
   color: #2c3e50;
 `;
 
-const Count = styled.div`
+const Count1 = styled.div`
   background-color: #2ecc71;
   text-align: center;
   color: white;
@@ -233,7 +233,32 @@ const Count = styled.div`
   height: 30px;
   border-radius: 5px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
+  padding: 0px 10px;
+  align-items: center;
+`;
+const Count2 = styled.div`
+  background-color: #2ecc71;
+  text-align: center;
+  color: white;
+  width: 300px;
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: start;
+  padding: 0px 10px;
+  align-items: center;
+`;
+const Count3 = styled.div`
+  background-color: #2ecc71;
+  text-align: center;
+  color: white;
+  width: 360px;
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: start;
+  padding: 0px 10px;
   align-items: center;
 `;
 
