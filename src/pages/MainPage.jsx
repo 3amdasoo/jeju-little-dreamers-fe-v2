@@ -222,16 +222,17 @@ const MainPage = () => {
       </AreYouSlaveContainer>
       {isOpenModal && (
         <ModalContainer>
-          <Title>가맹점 정보 조회 이메일 신청 안내</Title>
-          <Content>
-            본 서비스에서 제공되는 정보는 본 서비스에서 직접 검토 및 선별한
-            내용을 포함하고 있습니다
-          </Content>
-          <Content>
-            가맹점 관련 추가 정보는 아래 이메일로 문의 및 신청해주시면 SVC파일로
-            가맹점 정보를 확인하실 수 있습니다
-          </Content>
-          <Content>samdasu@jjddai.com</Content>
+          <Title>가맹점 추가 정보 신청 안내</Title>
+          <ContentContainer>
+            <Content>본 서비스는 직접 검토 및 선별한</Content>
+            <Content>아동급식카드 가맹점 정보를 제공하고 있습니다.</Content>
+            <Content>가맹점 추가 정보 수신을 원하는 경우</Content>
+            <Content>아래 이메일로 신청해주시면</Content>
+            <Content>
+              부적합 가맹점 정보를 포함한 SVC파일을 보내드립니다.
+            </Content>
+            <Email>서비스 문의 : samdasu@jjddai.com</Email>
+          </ContentContainer>
           <Check onClick={handleIsOpen}>확인</Check>
         </ModalContainer>
       )}
@@ -239,6 +240,12 @@ const MainPage = () => {
     </PageContainer>
   );
 };
+
+const Email = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+`;
+
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -320,9 +327,17 @@ const Title = styled.div`
   font-weight: 600;
   margin-bottom: 20px;
 `;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* align-items: start; */
+`;
+
 const Content = styled.div`
   /* text-align: start; */
   line-height: 30px;
+  margin: 0px 15px;
 `;
 
 const Check = styled.button`
