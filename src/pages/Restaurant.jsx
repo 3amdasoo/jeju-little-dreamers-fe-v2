@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import loading from "../assets/download.gif";
+import axios from "axios";
 
 const Restaurant = () => {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -181,6 +182,7 @@ const LoadingDiv = styled.div`
   font-weight: 600;
   font-size: 20px;
 `;
+
 const Loading = styled.img`
   width: 400px;
 `;
@@ -192,7 +194,13 @@ const ReviewHeader = styled.div`
   align-items: center;
 `;
 
-const TotalReview = styled.h3``;
+const TotalReview = styled.div`
+  font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #2c3e50;
+`;
+
 const ReviewBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -205,7 +213,8 @@ const ReviewBox = styled.div`
 
 const RateBox = styled.div`
   width: auto;
-  background-color: #ff7777;
+  height: 30px;
+  background-color: #ff914d;
   display: flex;
   flex-direction: row;
   border-radius: 5px;
@@ -213,6 +222,7 @@ const RateBox = styled.div`
 
 const ReviewContent = styled.h3`
   margin: 0px 0px 3px;
+  color: #2c3e50;
 `;
 
 const Count = styled.div`
@@ -220,7 +230,7 @@ const Count = styled.div`
   text-align: center;
   color: white;
   width: 320px;
-  height: 25px;
+  height: 30px;
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -278,13 +288,14 @@ const MenuTitle = styled.h2`
 `;
 
 const MenuList = styled.ul`
-  padding-left: 20px;
+  padding-left: 5px;
 `;
 
 const MenuItem = styled.li`
   font-size: 1.2rem;
   margin-bottom: 8px;
-  color: #2c3e50;
+  color: #7f8c8d;
+  font-weight: 500;
 `;
 
 const NoMenuMessage = styled.div`
@@ -319,17 +330,17 @@ const ReviewList = styled.div`
 `;
 
 const ReviewCard = styled.div`
-  background-color: #f7f9fa;
+  background-color: #efefef;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05); */
 `;
 
 const ReviewNickname = styled.span`
   font-weight: bold;
   color: black;
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const WriteReviewButton = styled.button`
@@ -354,4 +365,9 @@ const NoReviewsMessage = styled.div`
   color: #7f8c8d;
   text-align: center;
   margin-top: 20px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.05);
 `;
