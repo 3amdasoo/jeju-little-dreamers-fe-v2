@@ -244,6 +244,8 @@ const MainPage = () => {
 const Email = styled.div`
   font-size: 20px;
   font-weight: 600;
+  /* margin: 10px 0px; */
+  margin-top: 20px;
 `;
 
 const PageContainer = styled.div`
